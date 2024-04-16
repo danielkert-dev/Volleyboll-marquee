@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volleyboll</title>
+    <style>
+        .display {
+            color: white;
+            background-color: black;
+            font-size: 50vh;
+            overflow: hidden;
+        }
+
+        body {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <marquee scrollamount="30" class="display"></marquee>
+
+    <script>
+        const api_url = 'https://volleyboll-dev-quiet-mountain-3664.fly.dev';
+        const endpoint = '/tournament/info/?tournament_name=';
+        const tournament_name = 'test2';
+
+        fetch(api_url + endpoint + tournament_name)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.tournament) {
+                // Create an array to hold all team names
+                const teamNames = [];
+                
+                // Iterate over each tournament group to extract team names
+                data.tournament.forEach(tournament => {
+                    tournament.groups.forEach(group => {
+                        group.teams.forEach(team => {
+                            teamNames.push(team.name);
+                        });
+                    });
+                });
+
+                // Convert the array of team names into a comma-separated string and display it
+                document.querySelector('.display').textContent = teamNames.join(', ');
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
